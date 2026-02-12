@@ -7,7 +7,7 @@ import json
 import hmac
 import hashlib
 import base64
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, Optional
 
 
@@ -47,7 +47,7 @@ class JWTHandler:
         }
         
         # Create payload
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         payload = {
             "user_id": user_id,
             "iat": int(now.timestamp()),
@@ -119,7 +119,7 @@ class JWTHandler:
             if exp is None:
                 return False
             
-            if datetime.utcnow().timestamp() > exp:
+            if datetime.now(timezone.utc).timestamp() > exp:
                 return False
             
             return True

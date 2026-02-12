@@ -88,13 +88,33 @@ class BaselineStack(Stack):
             )
         )
 
+        # Create Authorizer Lambda Function
+        authorizer_function = lambda_.Function(
+            self,
+            "AuthorizerFunction",
+            runtime=lambda_.Runtime.PYTHON_3_12,
+            handler="auth.lambda_authorizer.lambda_authorizer",
+            code=lambda_.Code.from_asset("src"),
+            timeout=Duration.seconds(10),
+            memory_size=128,
+            log_retention=logs.RetentionDays.ONE_WEEK,
+        )
+
+        # Create Lambda Token Authorizer
+        authorizer = apigateway.TokenAuthorizer(
+            self,
+            "JwtAuthorizer",
+            handler=authorizer_function,
+            identity_source=apigateway.IdentitySource.header("Authorization"),
+        )
+
         # Create /v1 resource
         v1_resource = api.root.add_resource("v1")
 
         # Create /v1/events resource
         events_resource = v1_resource.add_resource("events")
 
-        # Add POST method to /v1/events
+        # Add POST method to /v1/events with authorizer
         events_resource.add_method(
             "POST",
             apigateway.LambdaIntegration(
@@ -115,7 +135,9 @@ class BaselineStack(Stack):
             method_responses=[
                 apigateway.MethodResponse(status_code="202"),
                 apigateway.MethodResponse(status_code="400"),
-            ]
+            ],
+            authorizer=authorizer,
+            authorization_type=apigateway.AuthorizationType.CUSTOM
         )
 
         # Stack Outputs
@@ -124,4 +146,5 @@ class BaselineStack(Stack):
         CfnOutput(self, "EventTopicArn", value=event_topic.topic_arn)
         CfnOutput(self, "IngressFunctionName", value=ingress_function.function_name)
         CfnOutput(self, "ConsumerFunctionName", value=consumer_function.function_name)
+        CfnOutput(self, "AuthorizerFunctionName", value=authorizer_function.function_name)
 
