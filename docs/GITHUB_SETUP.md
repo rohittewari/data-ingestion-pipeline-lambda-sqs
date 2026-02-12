@@ -15,8 +15,8 @@ This guide walks you through setting up GitHub for Continuous Integration (CI) w
 ```powershell
 cd c:\Rohit\1_Interview\FINRA_INTERVIEW
 git init
-git config user.name "Your Name"
-git config user.email "your.email@example.com"
+git config user.name "Rohit Tewari"
+git config user.email "rohit.tew@gmail.com"
 ```
 
 ### 2. Add GitHub as Remote
@@ -24,7 +24,7 @@ git config user.email "your.email@example.com"
 Replace `YOUR_USERNAME` and `YOUR_REPO_NAME` with your actual values:
 
 ```powershell
-git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+git remote add origin https://github.com/rohittewari/data-ingestion-pipeline-lambda-sqs.git
 ```
 
 Verify:

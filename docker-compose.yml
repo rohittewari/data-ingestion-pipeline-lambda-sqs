@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: finra-postgres
+    environment:
+      POSTGRES_USER: finra
+      POSTGRES_PASSWORD: finra123
+      POSTGRES_DB: finra_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finra"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - finra-network
+
+  localstack:
+    image: localstack/localstack:latest
+    container_name: finra-localstack
+    ports:
+      - "4566:4566"
+    environment:
+      SERVICES: sqs,lambda,dynamodb
+      DEBUG: 1
+      DATA_DIR: /tmp/localstack/data
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - localstack_data:/tmp/localstack
+    networks:
+      - finra-network
+
+volumes:
+  postgres_data:
+  localstack_data:
+
+networks:
+  finra-network:
+    driver: bridge
