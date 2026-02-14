@@ -33,15 +33,15 @@
   - [x] Build event envelope
   - [x] Return 202 with event_id
 
-- [ ] **5. Create SNS Topic in CDK**
-  - Create SNS topic for event distribution
-  - Link to event ingestion workflow
+- [x] **5. Create SNS Topic in CDK**
+  - [x] Create SNS topic for event distribution
+  - [x] Link to event ingestion workflow
   - Configure message filtering (optional)
 
-- [ ] **6. Connect SNS → SQS in CDK**
-  - Create SNS subscription to SQS queue
-  - Ensure SNS publishes to existing SQS queue
-  - Configure message attributes
+- [x] **6. Connect SNS -> SQS in CDK**
+  - [x] Create SNS subscription to SQS queue
+  - [x] Ensure SNS publishes to existing SQS queue
+  - [x] Configure message attributes
 
 - [ ] **7. Update Consumer Lambda Handler**
   - Receive SQS messages (batch mode)
@@ -203,3 +203,4 @@ Client → API Gateway → Ingress Lambda → SNS Topic → SQS Queue → Consum
 4. Verify exit criteria before completing phase
 
 **Ready to start? Pick the first task above! 🚀**
+

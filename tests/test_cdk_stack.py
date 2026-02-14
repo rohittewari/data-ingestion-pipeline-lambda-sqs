@@ -58,3 +58,33 @@ def test_baseline_stack_configures_api_gateway_with_authorizer() -> None:
             ),
         },
     )
+
+
+def test_baseline_stack_configures_sns_to_sqs_pipeline() -> None:
+    app = cdk.App()
+    stack = BaselineStack(app, "TestStackMessaging")
+    template = Template.from_stack(stack)
+
+    template.has_resource_properties(
+        "AWS::SNS::Topic",
+        {"TopicName": "event-pipeline-topic-dev"},
+    )
+
+    template.has_resource_properties(
+        "AWS::SNS::Subscription",
+        {"Protocol": "sqs"},
+    )
+
+    template.resource_count_is("AWS::SQS::QueuePolicy", 1)
+
+    template.has_resource_properties(
+        "AWS::Lambda::Function",
+        {
+            "Handler": "services.ingress.handler.lambda_handler",
+            "Environment": {
+                "Variables": {
+                    "SNS_TOPIC_ARN": Match.any_value(),
+                }
+            },
+        },
+    )
