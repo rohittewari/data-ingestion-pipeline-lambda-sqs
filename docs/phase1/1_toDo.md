@@ -26,12 +26,12 @@
   - [x] Return 400 for invalid payloads
   - [x] Return descriptive error messages
 
-- [ ] **4. Update Ingress Lambda Handler**
-  - Parse incoming request
-  - Validate payload
-  - Generate `event_id` (UUID)
-  - Build event envelope
-  - Return 202 with event_id
+- [x] **4. Update Ingress Lambda Handler**
+  - [x] Parse incoming request
+  - [x] Validate payload
+  - [x] Generate `event_id` (UUID)
+  - [x] Build event envelope
+  - [x] Return 202 with event_id
 
 - [ ] **5. Create SNS Topic in CDK**
   - Create SNS topic for event distribution

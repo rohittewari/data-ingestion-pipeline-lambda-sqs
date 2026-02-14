@@ -4,6 +4,7 @@ Tests payload validation, authorization, and event publishing
 """
 
 import json
+import uuid
 import pytest
 from unittest.mock import patch, MagicMock
 from src.services.ingress.handler import lambda_handler, _validate_payload, _error_response
@@ -49,9 +50,17 @@ class TestIngresHandler:
         assert response["statusCode"] == 202
         body = json.loads(response["body"])
         assert "event_id" in body
+        uuid.UUID(body["event_id"])
         assert body["message"] == "Event accepted for processing"
         assert "ingested_at" in body
         mock_sns.publish.assert_called_once()
+
+        publish_kwargs = mock_sns.publish.call_args.kwargs
+        published_message = json.loads(publish_kwargs["Message"])
+        assert published_message["event_id"] == body["event_id"]
+        assert published_message["event_version"] == "v1"
+        assert published_message["user_id"] == "test-user"
+        assert published_message["payload"] == valid_payload
     
     def test_missing_required_field_returns_400(self):
         """
