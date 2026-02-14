@@ -5,6 +5,7 @@ from aws_cdk import aws_lambda_event_sources as lambda_event_sources
 from aws_cdk import aws_logs as logs
 from aws_cdk import aws_sqs as sqs
 from aws_cdk import aws_sns as sns
+from aws_cdk import aws_sns_subscriptions as sns_subscriptions
 from constructs import Construct
 
 
@@ -41,8 +42,7 @@ class BaselineStack(Stack):
             memory_size=256,
             log_retention=logs.RetentionDays.ONE_WEEK,
         )
-
-        consumer_queue.grant_send_messages(ingress_function)
+        
         consumer_queue.grant_consume_messages(consumer_function)
 
         consumer_function.add_event_source(
@@ -65,7 +65,7 @@ class BaselineStack(Stack):
 
         # Create SNS subscription to SQS queue
         event_topic.add_subscription(
-            sns.SqsSubscription(consumer_queue)
+            sns_subscriptions.SqsSubscription(consumer_queue)
         )
 
         # Update Ingress Lambda environment with SNS Topic URL

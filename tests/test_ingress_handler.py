@@ -95,6 +95,26 @@ class TestIngresHandler:
         assert response["statusCode"] == 400
         body = json.loads(response["body"])
         assert "Invalid JSON" in body["error"]
+
+    def test_non_object_json_payload_returns_400(self):
+        """
+        GIVEN a valid JSON body that is not an object
+        WHEN lambda_handler is called
+        THEN it should return 400 with descriptive payload error
+        """
+        # Arrange
+        event = {
+            "body": "123",
+            "requestContext": {"authorizer": {"user_id": "test-user"}}
+        }
+
+        # Act
+        response = lambda_handler(event, None)
+
+        # Assert
+        assert response["statusCode"] == 400
+        body = json.loads(response["body"])
+        assert "JSON object" in body["error"]
     
     def test_empty_body_returns_400(self):
         """

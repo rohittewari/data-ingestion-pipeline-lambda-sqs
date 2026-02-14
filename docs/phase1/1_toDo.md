@@ -21,10 +21,10 @@
   - Generate test JWT tokens
   - Configure API Gateway authorizer
 
-- [ ] **3. Add Payload Validation**
-  - Validate required fields: `event_type`, `occurred_at`, `source`, `payload`
-  - Return 400 for invalid payloads
-  - Return descriptive error messages
+- [x] **3. Add Payload Validation**
+  - [x] Validate required fields: `event_type`, `occurred_at`, `source`, `payload`
+  - [x] Return 400 for invalid payloads
+  - [x] Return descriptive error messages
 
 - [ ] **4. Update Ingress Lambda Handler**
   - Parse incoming request

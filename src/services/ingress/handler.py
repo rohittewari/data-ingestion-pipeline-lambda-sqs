@@ -105,6 +105,9 @@ def _validate_payload(payload: Dict[str, Any]) -> Optional[str]:
     Returns:
         Error message if validation fails, None if valid
     """
+    if not isinstance(payload, dict):
+        return "Invalid payload: request body must be a JSON object"
+
     required_fields = {
         "event_type": str,
         "occurred_at": str,
@@ -156,5 +159,4 @@ def _error_response(status_code: int, message: str) -> Dict[str, Any]:
             "status_code": status_code
         })
     }
-
 
